@@ -704,7 +704,7 @@ fn load_config() -> Result<ConfigData, ()> {
     match fs::create_dir_all("config") {
         Ok(()) => {}
         Err(e) => {
-            println!("Stutus: Error");
+            println!("Status: Error");
             println!("{:?}", e.kind());
             return Err(())
         }
@@ -714,7 +714,7 @@ fn load_config() -> Result<ConfigData, ()> {
         Ok(mut t) => match t.write_all("execution = 20;\ncreate_report = true;".as_bytes()) {
             Ok(()) => {}
             Err(e) => {
-                println!("Stutus: Error");
+                println!("Status: Error");
                 println!("{:?}", e.kind());
                 return Err(())
             }
@@ -725,7 +725,7 @@ fn load_config() -> Result<ConfigData, ()> {
     let mut file = match File::open("config/config.txt"){
         Ok(t) => t,
         Err(e) => {
-            println!("Stutus: Error");
+            println!("Status: Error");
             println!("{:?}", e.kind());
             return Err(())
         }
@@ -735,7 +735,7 @@ fn load_config() -> Result<ConfigData, ()> {
     match file.read_to_string(&mut buf) {
         Ok(..) => {}
         Err(e) => {
-            println!("Stutus: Error");
+            println!("Status: Error");
             println!("{:?}", e.kind());
             return Err(())
         }
@@ -790,7 +790,7 @@ fn load_config() -> Result<ConfigData, ()> {
         if p.skip_space().peek == Some('=') {
             p.next();
         } else {
-            println!("Stutus: SyntaxError");
+            println!("Status: SyntaxError");
             let th = match parameter_count {
                 1 => "st",
                 2 => "nd",
@@ -805,7 +805,7 @@ fn load_config() -> Result<ConfigData, ()> {
         if p.skip_space().peek == Some(';') {
             p.next();
         } else {
-            println!("Stutus: SyntaxError");
+            println!("Status: SyntaxError");
             let th = match parameter_count {
                 1 => "st",
                 2 => "nd",
@@ -831,13 +831,13 @@ fn load_config() -> Result<ConfigData, ()> {
                 Ok(t) => match t {
                     10 | 20 | 50 | 100 | 200 | 500 | 1000 | 2000 | 5000 => t,
                     _ => {
-                        println!("Stutus: SyntaxError");
+                        println!("Status: SyntaxError");
                         println!("The value of parameter \"execution\" must 10 | 20 | 50 | 100 | 200 | 500 | 1000 | 2000 | 5000");
                         return Err(())
                     }
                 },
                 Err(..) => {
-                    println!("Stutus: SyntaxError");
+                    println!("Status: SyntaxError");
                     println!("The value of parameter \"execution\" is not integer");
                     return Err(())
                 }
@@ -848,7 +848,7 @@ fn load_config() -> Result<ConfigData, ()> {
             config_data.create_report = match value.parse::<bool>() {
                 Ok(t) => t,
                 Err(..) => {
-                    println!("Stutus: Error");
+                    println!("Status: Error");
                     println!("The value of parameter \"create_report\" is not bool");
                     println!("it must true | false");
                     return Err(())
@@ -857,12 +857,12 @@ fn load_config() -> Result<ConfigData, ()> {
             continue;
         }
         // The parameter “create_report” does not exist.
-        println!("Stutus: Error");
+        println!("Status: Error");
         println!("The parameter \"{ident}\" does not exist.");
         return Err(())
     };
 
-    println!("Stutus: Ok");
+    println!("Status: Ok");
     Ok(config_data)
 }
 
@@ -875,7 +875,7 @@ fn create_report(app: &App) {
     let state = match &app.state {
         Some(t) => t,
         None => {
-            println!("Stutus: Error");
+            println!("Status: Error");
             println!("The report could not be created because no data existed");
             return
         }
@@ -890,7 +890,7 @@ fn create_report(app: &App) {
                     match fs::create_dir("report") {
                         Ok(..) => (),
                         Err(e) => {
-                            println!("Stutus: Error");
+                            println!("Status: Error");
                             println!("{:?}", e.kind());
                             return
                         },
@@ -898,14 +898,14 @@ fn create_report(app: &App) {
                     match File::create(format!("report/{time}.txt")) {
                         Ok(f) => f,
                         Err(e) => {
-                            println!("Stutus: Error");
+                            println!("Status: Error");
                             println!("{:?}", e.kind());
                             return
                         },
                     }
                 }
                 e => {
-                    println!("Stutus: Error");
+                    println!("Status: Error");
                     println!("{:?}", e);
                     return
                 }
@@ -940,13 +940,13 @@ fn create_report(app: &App) {
     match file.write_all(s.as_bytes()) {
         Ok(()) => {}
         Err(e) => {
-            println!("Stutus: Error");
+            println!("Status: Error");
             println!("{:?}", e.kind());
             return
         }
     }
 
-    println!("Stutus: Ok");
+    println!("Status: Ok");
 }
 
 #[cfg(target_arch = "wasm32")]
